@@ -15,6 +15,7 @@ import {
   InsufficientFundsError,
   TokenAmount,
   ICPToken,
+  SubAccount,
 } from "@dfinity/nns";
 import {
   tryParseAccountIdentifier,
@@ -297,6 +298,7 @@ async function getBalance() {
   const identity = await getIdentity();
   const accountIdentifier = AccountIdentifier.fromPrincipal({
     principal: identity.getPrincipal(),
+    subAccount: SubAccount.fromID(1)
   });
 
   const ledger = LedgerCanister.create({
@@ -328,6 +330,7 @@ async function sendICP(to: AccountIdentifier, amount: ICP) {
     to: to,
     amount: amount.toE8s(),
     memo: BigInt(0),
+    fromSubAccount: Array.from(SubAccount.fromID(1).toUint8Array()),
   });
 
   ok(`Transaction completed at block height ${blockHeight}.`);
@@ -340,6 +343,7 @@ async function showInfo(showOnDevice?: boolean) {
   const identity = await getIdentity();
   const accountIdentifier = AccountIdentifier.fromPrincipal({
     principal: identity.getPrincipal(),
+    subAccount: SubAccount.fromID(2)
   });
   const publicKey = identity.getPublicKey() as Secp256k1PublicKey;
 
